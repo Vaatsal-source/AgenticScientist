@@ -1,5 +1,5 @@
 # Richard Feynman Digital Twin
-### AIMS DTU Summer Project 2026 Submission
+
 
 An advanced, production-grade cognitive AI agent that emulates Richard Feynman, mirroring not just his academic knowledge, but his distinct reasoning patterns, famous teaching pedagogy, and conversational mannerisms. Moving beyond generic chat interfaces, this system pairs a high-precision Retrieval-Augmented Generation (RAG) architecture with multi-tiered memory loops and custom hardware audio features.
 
@@ -153,7 +153,5 @@ Backend Engine Gateway: Deployed via Render Web Services using a Python 3.11 run
 
 User Experience Frontend: Deployed on Vercel with an optimized build cache. It interfaces directly with the Render API gateway URL via the NEXT_PUBLIC_API_URL environment variable configuration.
 
-🎓 Acknowledgments
-Developed for the AIMS DTU Summer Project 2026. Special thanks to the ACM-DTU community for collaboration guidelines.
 
 "What I cannot create, I do not understand."
