@@ -14,7 +14,7 @@ export default function FeynmanLaboratoryDashboard() {
   const refreshMemoryDashboard = async () => {
     try {
       const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-      const res = await fetch("http://127.0.0.1:8000/api/memory/dashboard");
+      const res = await fetch(`${apiBase}/api/memory/dashboard`);
       const data = await res.json();
       if (data?.status === "success") {
         setDashboardMemories(data.memories);

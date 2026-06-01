@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-export function useFeynmanStream(baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000") {
+export function useFeynmanStream(baseUrl) {
+  const activeUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
   const [messages, setMessages] = useState([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
@@ -18,7 +19,7 @@ export function useFeynmanStream(baseUrl = process.env.NEXT_PUBLIC_API_URL || "h
 
     try {
       // Fetch request to handle the SSE streaming route
-      const response = await fetch(`${baseUrl}/api/chat/stream`, {
+      const response = await fetch(`${activeUrl}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId, query: query }),
