@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export function useFeynmanStream(baseUrl) {
+  // Safe fallback hierarchy check
   const activeUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
   const [messages, setMessages] = useState([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -18,7 +19,7 @@ export function useFeynmanStream(baseUrl) {
     setMessages((prev) => [...prev, { role: "model", content: "" }]);
 
     try {
-      // Fetch request to handle the SSE streaming route
+      // Fetch request pointing to the verified dynamic activeUrl location
       const response = await fetch(`${activeUrl}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,7 +35,6 @@ export function useFeynmanStream(baseUrl) {
         if (done) break;
 
         const chunk = decoder.decode(value);
-        // Split out raw values using standard SSE data prefixes
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ")) {
@@ -42,7 +42,6 @@ export function useFeynmanStream(baseUrl) {
             if (token && !token.includes("[ERROR]")) {
               currentResponse += token + " "; // Keep spacing clean
               
-              // Dynamically update the final element in the array to handle typewriter effects
               setMessages((prev) => {
                 const updated = [...prev];
                 if (updated.length > 0) {

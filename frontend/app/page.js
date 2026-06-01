@@ -5,7 +5,10 @@ import { useFeynmanStream } from "../hooks/useFeynmanStream";
 
 export default function FeynmanLaboratoryDashboard() {
   const sessionId = "feynman_shared_lab_01";
-  const { messages, isStreaming, askFeynman } = useFeynmanStream("http://127.0.0.1:8000");
+  
+  // FIX 1: Remove the hardcoded local string so the hook falls back to your env variables!
+  const { messages, isStreaming, askFeynman } = useFeynmanStream();
+  
   const [inputQuery, setInputQuery] = useState("");
   const [dashboardMemories, setDashboardMemories] = useState([]);
   const [isResetting, setIsResetting] = useState(false);
@@ -34,14 +37,14 @@ export default function FeynmanLaboratoryDashboard() {
 
     setIsResetting(true);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/memory/reset", {
+      // FIX 2: Swap the hardcoded localhost string literal for the dynamic apiBase variable
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+      const response = await fetch(`${apiBase}/api/memory/reset`, {
         method: "DELETE",
       });
 
       if (response.ok) {
-        // Clear UI states immediately
         setDashboardMemories([]);
-        // Force fully reload or empty internal streaming arrays if necessary
         alert("💥 Memory core completely wiped. All short-term and long-term profiles purged.");
       } else {
         const errData = await response.json().catch(() => ({}));
@@ -77,7 +80,6 @@ export default function FeynmanLaboratoryDashboard() {
     setInputQuery("");
   };
 
-  // Maps distinct memory categories to responsive visual border/background tones
   const getCategoryColor = (cat) => {
     switch (cat) {
       case "User Profile": return "border-emerald-500 bg-emerald-950/40 text-emerald-300";
@@ -104,7 +106,6 @@ export default function FeynmanLaboratoryDashboard() {
           )}
         </header>
 
-        {/* Dynamic Message Feed Window */}
         <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-900/50">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-500 space-y-2 text-center p-8">
@@ -130,7 +131,6 @@ export default function FeynmanLaboratoryDashboard() {
           )}
         </div>
 
-        {/* Input Interface Entry Form */}
         <form onSubmit={handleSubmit} className="p-4 bg-slate-950 border-t border-slate-800 flex gap-3">
           <input
             type="text"
@@ -174,7 +174,6 @@ export default function FeynmanLaboratoryDashboard() {
           </div>
         </header>
 
-        {/* Live Visual Memory Matrix Layout Container */}
         <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-950/30">
           {dashboardMemories.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-600 text-center p-6 text-sm">
